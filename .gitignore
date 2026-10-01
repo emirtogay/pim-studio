@@ -1,0 +1,101 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+.env
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Project data — never commit
+# The Northwind catalogue is internal business data, keep it out of the repo.
+# Used as the EAN → ModelColor bridge; each developer/deploy places the current
+# snapshot at data/catalogue/ by hand.
+data/catalogue/*.xlsx
+data/catalogue/*.xls
+data/catalogue/*.csv
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Local databases (we use Postgres in production; SQLite only for spikes)
+*.db
+*.sqlite
+*.sqlite3
+
+# Secrets — never commit
+.env.local
+.env.*.local
+secrets.*
+*.pem
+*.key
+*.pfx
+
+# Local tool config
+.claude/
+
+# OneDrive sync artefacts
+*.tmp
+~$*
+
+# Admin panel frontend — node_modules and Vite build output. Source lives at
+# src/pim_studio/admin/frontend/; the build output lands at
+# src/pim_studio/admin/static/ (configured in vite.config.ts) and is
+# regenerated on every build, so there's no reason to version it.
+src/pim_studio/admin/frontend/node_modules/
+src/pim_studio/admin/frontend/dist/
+src/pim_studio/admin/static/
+
+# Local backup dumps written by scripts/backup.ps1 — local-dev only.
+# On the server, dumps land in a backups folder outside the repo.
+backups/
+*.dump
+
+# Uploaded backoffice exports and masterdata — internal Northwind data. The
+# README is versioned so a fresh clone knows which snapshots to place here and
+# where they come from; everything beside it is ignored.
+data/uploads/*
+!data/uploads/README.md
+
+
+# Generated demo extract (python -m pim_studio.demo.seed); never versioned.
+src/pim_studio/admin/frontend/public/demo/
+
+# Local virtualenv for running the suite in a container that ships an older
+# Python than the project requires.
+/.venv/
+
+# Pulled by scripts/storefront_reconcile.py. A snapshot of somebody else's
+# live catalogue, refetched in a couple of minutes; not history worth keeping.
+scripts/.storefront_cache/
+
+# Photo hand-off bundles (ZIP + Excel) written by the image pipeline and the demo seed.
+data/bundles/
+
+# TypeScript incremental build cache
+*.tsbuildinfo

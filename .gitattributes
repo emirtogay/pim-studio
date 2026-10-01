@@ -1,0 +1,21 @@
+# Line endings.
+#
+# The repo is developed on Windows and deployed to Linux, so anything the
+# server executes must be LF regardless of what the checkout looks like.
+# `pim-studio-sync.sh` shipped with CRLF once and failed in a way that read
+# like a broken script rather than a line-ending problem:
+#
+#     set: -: invalid option
+#     $'\r': command not found
+#     syntax error: unexpected end of file
+#
+# It is installed by cron, so it failed nightly and silently. The deploy
+# script next to it happened to be LF and worked, which made the difference
+# look like something specific to the sync.
+
+* text=auto
+
+*.sh        text eol=lf
+Dockerfile  text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf

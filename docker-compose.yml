@@ -1,0 +1,38 @@
+# The demo in one command:
+#
+#   docker compose up --build        then open http://localhost:8000 and sign in as demo / demo
+#
+# DEMO_MODE=1 replaces every external system with a mock (src/pim_studio/integrations.py), and the entrypoint
+# fills the database from the synthetic Northwind Apparel catalogue on first boot. The demo keeps its database
+# in SQLite on the `data` volume; production runs the same image against PostgreSQL by setting DATABASE_URL
+# (see .env.example).
+
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    # A process can be alive and still not serving (a deadlocked connection, a blocked event loop), which
+    # `restart` alone never notices. /api/health is a real route: the SPA catch-all answers unknown paths
+    # with index.html and a 200, so a check against a made-up path could never fail.
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/api/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 180s
+    environment:
+      DEMO_MODE: ${DEMO_MODE:-1}
+      DATABASE_URL: ${DATABASE_URL:-sqlite:////app/data/pim_studio.db}
+      SESSION_SECRET_KEY: ${SESSION_SECRET_KEY:-local-demo-only-replace-for-any-real-use}
+      SCHEDULER_ENABLED: "false"
+      LOGS_ROOT: /app/logs
+      UPLOADS_ROOT: /app/data/uploads
+    volumes:
+      - data:/app/data
+      - logs:/app/logs
+    ports:
+      - "8000:8000"
+
+volumes:
+  data:
+  logs:

@@ -1,0 +1,17 @@
+# Keep the build context small and free of local state. The Dockerfile only COPYs explicit paths, so this
+# is defence in depth for the day someone adds a broader COPY.
+.git
+.venv/
+venv/
+**/node_modules/
+**/__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.db
+*.sqlite
+.env
+.env.local
+logs/
+data/
+src/pim_studio/admin/static/
